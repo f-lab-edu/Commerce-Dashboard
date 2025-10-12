@@ -1,4 +1,5 @@
 import { SuspenseBoundary } from '@/components/boundaries/SuspenseBoundary';
+import { KPISkeleton } from '@/components/dashboard/KPISkeleton';
 import { Box, Container } from '@mui/material';
 import dynamic from 'next/dynamic';
 
@@ -10,7 +11,7 @@ export default function Home() {
   return (
     <Container maxWidth='lg'>
       <Box sx={{ py: 4 }}>
-        <SuspenseBoundary fallback={<div>Loading KPI...</div>}>
+        <SuspenseBoundary fallback={<KPISkeleton />}>
           <KPISection />
         </SuspenseBoundary>
       </Box>
