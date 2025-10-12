@@ -1,7 +1,7 @@
 import { http, HttpResponse, delay } from 'msw';
 import { mockKPI } from '../data';
 
-export const hnadlers = [
+export const handlers = [
   http.get('/api/kpi', async () => {
     await delay(500);
 
