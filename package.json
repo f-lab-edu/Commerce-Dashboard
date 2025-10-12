@@ -49,5 +49,10 @@
     "*.{json,md,css,scss,html}": [
       "prettier --write"
     ]
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
