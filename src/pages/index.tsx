@@ -7,12 +7,25 @@ const KPISection = dynamic(() => import('@/components/dashboard/KPISection'), {
   ssr: false,
 });
 
+const CategoryInsightSection = dynamic(
+  () => import('@/components/dashboard/insight-section/CategoryInsightSection'),
+  {
+    ssr: false,
+  },
+);
+
 export default function Home() {
   return (
     <Container maxWidth='lg'>
       <Box sx={{ py: 4 }}>
         <SuspenseBoundary fallback={<KPISkeleton />}>
           <KPISection />
+        </SuspenseBoundary>
+      </Box>
+
+      <Box sx={{ mt: 6 }}>
+        <SuspenseBoundary fallback={<div>Loading...</div>}>
+          <CategoryInsightSection />
         </SuspenseBoundary>
       </Box>
     </Container>
