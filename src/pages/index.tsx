@@ -1,4 +1,5 @@
 import { SuspenseBoundary } from '@/components/boundaries/SuspenseBoundary';
+import { CategoryInsightSkeleton } from '@/components/dashboard/insight-section/CategoryInsightSkeleton';
 import { KPISkeleton } from '@/components/dashboard/KPISkeleton';
 import { Box, Container } from '@mui/material';
 import dynamic from 'next/dynamic';
@@ -24,7 +25,7 @@ export default function Home() {
       </Box>
 
       <Box sx={{ mt: 6 }}>
-        <SuspenseBoundary fallback={<div>Loading...</div>}>
+        <SuspenseBoundary fallback={<CategoryInsightSkeleton />}>
           <CategoryInsightSection />
         </SuspenseBoundary>
       </Box>
