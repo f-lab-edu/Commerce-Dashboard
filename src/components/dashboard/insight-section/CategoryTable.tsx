@@ -16,7 +16,7 @@ interface CategoryTableProps {
 
 export default function CategoryTable({ categories }: CategoryTableProps) {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ height: '100%', minHeight: 500 }}>
       <Table>
         <TableHead>
           <TableRow>
