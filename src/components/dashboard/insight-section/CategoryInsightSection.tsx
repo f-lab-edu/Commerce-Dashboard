@@ -1,6 +1,7 @@
 import { useCategoryInsights } from '@/hooks/queries/useCategoryInsights';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import CategoryTable from './CategoryTable';
+import CategoryChart from './CategoryChart';
 
 export default function CategoryInsightSection() {
   const { categories } = useCategoryInsights();
@@ -11,13 +12,15 @@ export default function CategoryInsightSection() {
         카테고리별 매출 인사이트
       </Typography>
 
-      <Grid container spacing={3}>
-        <Grid>
+      <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+        <Box sx={{ flex: '1 1 450px', minWidth: 0, height: 500 }}>
           <CategoryTable categories={categories} />
-        </Grid>
+        </Box>
 
-        <Grid>{/* <CategoryChart categories={categories} /> */}</Grid>
-      </Grid>
+        <Box sx={{ flex: '1 1 450px', minWidth: 0, height: 500 }}>
+          <CategoryChart categories={categories} />
+        </Box>
+      </Box>
     </Box>
   );
 }
