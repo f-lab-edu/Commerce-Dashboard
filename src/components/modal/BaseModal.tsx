@@ -2,6 +2,8 @@ import { ModalState } from '@/types/modal/modal';
 import { Dialog, DialogActions, DialogContent } from '@mui/material';
 import ModalContent from './ModalContent';
 import ModalActions from './ModalActions';
+import { closeModalAtom } from '@/lib/modal/modalAtoms';
+import { useSetAtom } from 'jotai';
 
 interface BaseModalProps {
   modal: ModalState;
@@ -9,14 +11,17 @@ interface BaseModalProps {
 }
 
 export default function BaseModal({ modal, zIndex }: BaseModalProps) {
-  const { options, resolve, reject } = modal;
+  const { id, options, resolve, reject } = modal;
+  const closeModal = useSetAtom(closeModalAtom);
 
   const handleClose = () => {
     reject();
+    closeModal({ id, value: undefined });
   };
 
   const handleConfirm = (value?: unknown) => {
     resolve(value);
+    closeModal({ id, value });
   };
 
   return (
