@@ -1,3 +1,4 @@
+import { Provider as JotaiProvider } from 'jotai';
 import type { AppProps } from 'next/app';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -7,6 +8,7 @@ import { GlobalErrorBoundary } from '@/components/boundaries/GlobalErrorBoundary
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ModalContainer } from '@/components/modal/ModalContainer';
 
 if (process.env.NODE_ENV === 'development') {
   if (typeof window !== 'undefined') {
@@ -37,11 +39,14 @@ export default function App({ Component, pageProps }: AppProps) {
   );
 
   return (
-    <GlobalErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </GlobalErrorBoundary>
+    <JotaiProvider>
+      <GlobalErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+          <ModalContainer />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </GlobalErrorBoundary>
+    </JotaiProvider>
   );
 }
