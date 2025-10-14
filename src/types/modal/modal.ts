@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export type ModalType = 'default' | 'comfirm' | 'alert' | 'success' | 'error';
+export type ModalType = 'default' | 'confirm' | 'alert' | 'success' | 'error';
 
 export interface ModalOptions {
   title?: string;
