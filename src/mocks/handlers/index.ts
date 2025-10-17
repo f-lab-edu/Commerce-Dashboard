@@ -1,5 +1,6 @@
 import { http, HttpResponse, delay } from 'msw';
 import { mockCategories, mockKPI } from '../data';
+import { orderHandlers } from './orders';
 
 export const handlers = [
   http.get('/api/kpi', async () => {
@@ -13,4 +14,6 @@ export const handlers = [
 
     return HttpResponse.json(mockCategories);
   }),
+
+  ...orderHandlers,
 ];
