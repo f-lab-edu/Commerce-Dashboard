@@ -15,20 +15,29 @@ const CategoryInsightSection = dynamic(
   },
 );
 
+const OrderSidebar = dynamic(
+  () => import('@/components/order-sidebar/OrderSidebar'),
+  { ssr: false },
+);
+
 export default function Home() {
   return (
-    <Container maxWidth='lg'>
-      <Box sx={{ py: 4 }}>
-        <SuspenseBoundary fallback={<KPISkeleton />}>
-          <KPISection />
-        </SuspenseBoundary>
-      </Box>
+    <Box sx={{ position: 'relative' }}>
+      <Container maxWidth='lg' sx={{ mr: '400px' }}>
+        <Box sx={{ py: 4 }}>
+          <SuspenseBoundary fallback={<KPISkeleton />}>
+            <KPISection />
+          </SuspenseBoundary>
+        </Box>
 
-      <Box sx={{ mt: 6 }}>
-        <SuspenseBoundary fallback={<CategoryInsightSkeleton />}>
-          <CategoryInsightSection />
-        </SuspenseBoundary>
-      </Box>
-    </Container>
+        <Box sx={{ mt: 6 }}>
+          <SuspenseBoundary fallback={<CategoryInsightSkeleton />}>
+            <CategoryInsightSection />
+          </SuspenseBoundary>
+        </Box>
+      </Container>
+
+      <OrderSidebar />
+    </Box>
   );
 }
