@@ -55,7 +55,6 @@ export default function OrderDetailModal({
 
   return (
     <Box sx={{ minWidth: 400, py: 2 }}>
-      {/* 주문번호 & 상태 */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
         <Typography variant='h6'>{order.id}</Typography>
         <Chip
@@ -66,7 +65,6 @@ export default function OrderDetailModal({
 
       <Divider sx={{ my: 2 }} />
 
-      {/* 상품 정보 */}
       <Box sx={{ mb: 2 }}>
         <Typography variant='caption' color='text.secondary' gutterBottom>
           상품 정보
@@ -95,7 +93,6 @@ export default function OrderDetailModal({
 
       <Divider sx={{ my: 2 }} />
 
-      {/* 주문 정보 */}
       <Box sx={{ mb: 2 }}>
         <Typography variant='caption' color='text.secondary' gutterBottom>
           주문 정보
