@@ -27,8 +27,6 @@ export default function OrderList() {
     },
   });
 
-  console.log(orders);
-
   if (isLoading) {
     return (
       <Box
