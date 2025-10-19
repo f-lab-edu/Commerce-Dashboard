@@ -26,6 +26,11 @@ export const fetchOrders = (params?: {
   limit?: number;
   startDate?: string;
   endDate?: string;
+  status?: string;
+  minAmount?: number;
+  maxAmount?: number;
+  q?: string;
+  orderNumber?: string;
 }) =>
   api.get<PaginatedResponse<OrderDTO>>('orders', {
     searchParams: params,
