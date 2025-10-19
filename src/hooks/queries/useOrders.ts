@@ -25,6 +25,11 @@ export function useOrders(filter: OrderFilter) {
         limit: filter.limit || 20,
         startDate: filter.startDate?.toISOString().split('T')[0],
         endDate: filter.endDate?.toISOString().split('T')[0],
+        status: filter.status,
+        minAmount: filter.minAmount,
+        maxAmount: filter.maxAmount,
+        q: filter.query,
+        orderNumber: filter.orderNumber,
       }),
     getNextPageParam: (lastPage) => {
       return lastPage.page < lastPage.totalPages
@@ -99,7 +104,7 @@ export function useUpdateOrderStatus() {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<OrderDTO>>>(
         { queryKey: ['/orders'] },
         (oldData) => {
-          if (!oldData) return oldData;
+          if (!oldData || !oldData.pages) return oldData;
 
           return {
             ...oldData,
