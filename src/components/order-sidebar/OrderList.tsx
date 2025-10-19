@@ -2,8 +2,11 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 import { useOrders } from '@/hooks/queries/useOrders';
 import useInView from '@/hooks/useInView';
 import OrderListItem from './OrderListItem';
+import { useOrderParams } from '@/hooks/params/useOrderParams';
 
 export default function OrderList() {
+  const { getApiParams } = useOrderParams();
+
   const {
     data: orders,
     isLoading,
@@ -11,10 +14,7 @@ export default function OrderList() {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-  } = useOrders({
-    page: 1,
-    limit: 20,
-  });
+  } = useOrders(getApiParams);
 
   const { ref } = useInView({
     threshold: 0.1,
