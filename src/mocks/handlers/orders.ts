@@ -106,10 +106,53 @@ export const orderHandlers = [
 
     let filtered = [...mockOrders];
 
-    if (params.startDate) {
+    if (params.q) {
+      const query = params.q.toLowerCase();
       filtered = filtered.filter(
-        (order) => order.orderDate >= params.startDate!,
+        (order) =>
+          order.productName.toLowerCase().includes(query) ||
+          order.customerName.toLowerCase().includes(query) ||
+          order.id.toLowerCase().includes(query),
       );
+    }
+
+    if (params.orderNumber) {
+      filtered = filtered.filter((order) =>
+        order.id.toLowerCase().includes(params.orderNumber!.toLowerCase()),
+      );
+    }
+
+    if (params.status && params.status !== 'all') {
+      const statusUpper = params.status.toUpperCase();
+      filtered = filtered.filter((order) => order.status === statusUpper);
+    }
+
+    if (params.minAmount) {
+      const min = Number(params.minAmount);
+      if (!isNaN(min)) {
+        filtered = filtered.filter((order) => order.amount >= min);
+      }
+    }
+
+    if (params.maxAmount) {
+      const max = Number(params.maxAmount);
+      if (!isNaN(max)) {
+        filtered = filtered.filter((order) => order.amount <= max);
+      }
+    }
+
+    if (params.startDate) {
+      filtered = filtered.filter((order) => {
+        const orderDateOnly = order.orderDate.split('T')[0];
+        return orderDateOnly >= params.startDate!;
+      });
+    }
+
+    if (params.endDate) {
+      filtered = filtered.filter((order) => {
+        const orderDateOnly = order.orderDate.split('T')[0];
+        return orderDateOnly <= params.endDate!;
+      });
     }
 
     const total = filtered.length;
