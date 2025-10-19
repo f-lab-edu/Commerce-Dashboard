@@ -4,12 +4,16 @@ import {
   Divider,
   Chip,
   CircularProgress,
+  Button,
 } from '@mui/material';
-import { useOrder } from '@/hooks/queries/useOrders';
-import { ORDER_STATUS_LABEL } from '@/types';
+import { useOrder, useUpdateOrderStatus } from '@/hooks/queries/useOrders';
+import { ORDER_STATUS_LABEL, OrderStatus } from '@/types';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { formatDateTimeKorean } from '@/utils/formatDate';
 import Link from 'next/link';
+import { useModal } from '@/hooks/useModal';
+import { useState } from 'react';
+import OrderStatusSelect from './OrderStatusSelect';
 
 interface OrderDetailModalContentProps {
   orderId: string;
@@ -19,6 +23,12 @@ export default function OrderDetailModal({
   orderId,
 }: OrderDetailModalContentProps) {
   const { data: order, isLoading } = useOrder(orderId);
+  const { mutate: updateStatus, isPending } = useUpdateOrderStatus();
+  const modal = useModal();
+
+  const [selectedStatus, setSelectedStatus] = useState<OrderStatus | null>(
+    null,
+  );
 
   if (isLoading) {
     return (
@@ -36,6 +46,53 @@ export default function OrderDetailModal({
     );
   }
 
+  const currentStatus = selectedStatus || order.status;
+
+  const handleStatusChange = (newStatus: OrderStatus) => {
+    setSelectedStatus(newStatus);
+  };
+
+  const handleSave = async () => {
+    if (!selectedStatus || selectedStatus === order.status) {
+      modal.alert({
+        title: '알림',
+        description: '변경된 내용이 없습니다',
+      });
+      return;
+    }
+
+    const confirmed = await modal.confirm({
+      title: '주문 상태 변경',
+      description: `주문 상태를 "${ORDER_STATUS_LABEL[order.status]}"에서 "${ORDER_STATUS_LABEL[selectedStatus]}"로 변경하시겠습니까?`,
+      confirmText: '변경',
+      cancelText: '취소',
+    });
+
+    if (!confirmed) return;
+
+    updateStatus(
+      {
+        id: orderId,
+        data: { status: selectedStatus },
+      },
+      {
+        onSuccess: () => {
+          modal.success({
+            title: '성공',
+            description: '주문 상태가 변경되었습니다',
+          });
+        },
+        onError: (error: Error) => {
+          modal.error({
+            title: '실패',
+            description: error.message || '주문 상태 변경에 실패했습니다',
+          });
+          setSelectedStatus(order.status);
+        },
+      },
+    );
+  };
+
   const getStatusColor = () => {
     switch (order.status) {
       case 'PENDING':
@@ -52,6 +109,8 @@ export default function OrderDetailModal({
         return 'default';
     }
   };
+
+  const hasChanges = selectedStatus && selectedStatus !== order.status;
 
   return (
     <Box sx={{ minWidth: 400, py: 2 }}>
@@ -114,6 +173,40 @@ export default function OrderDetailModal({
           <Typography variant='body2'>{order.customerName}</Typography>
         </Box>
       </Box>
+
+      <Box sx={{ mb: 2 }}>
+        <Typography variant='caption' color='text.secondary' gutterBottom>
+          주문 상태 변경
+        </Typography>
+        <Box sx={{ mt: 1 }}>
+          <OrderStatusSelect
+            value={currentStatus}
+            onChange={handleStatusChange}
+            disabled={isPending}
+          />
+        </Box>
+      </Box>
+
+      {hasChanges && (
+        <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
+          <Button
+            variant='outlined'
+            fullWidth
+            onClick={() => setSelectedStatus(order.status)}
+            disabled={isPending}
+          >
+            취소
+          </Button>
+          <Button
+            variant='contained'
+            fullWidth
+            onClick={handleSave}
+            disabled={isPending}
+          >
+            {isPending ? '저장 중...' : '저장'}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 }
