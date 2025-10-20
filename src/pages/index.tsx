@@ -1,4 +1,5 @@
 import { SuspenseBoundary } from '@/components/boundaries/SuspenseBoundary';
+import CalendarSkeleton from '@/components/calendar/CalendarSkeleton';
 import { CategoryInsightSkeleton } from '@/components/dashboard/insight-section/CategoryInsightSkeleton';
 import { KPISkeleton } from '@/components/dashboard/KPISkeleton';
 import { Box, Container } from '@mui/material';
@@ -20,6 +21,10 @@ const OrderSidebar = dynamic(
   { ssr: false },
 );
 
+const Calendar = dynamic(() => import('@/components/calendar/Calendar'), {
+  ssr: false,
+});
+
 export default function Home() {
   return (
     <Box sx={{ position: 'relative' }}>
@@ -33,6 +38,12 @@ export default function Home() {
         <Box sx={{ mt: 6 }}>
           <SuspenseBoundary fallback={<CategoryInsightSkeleton />}>
             <CategoryInsightSection />
+          </SuspenseBoundary>
+        </Box>
+
+        <Box sx={{ mt: 6 }}>
+          <SuspenseBoundary fallback={<CalendarSkeleton />}>
+            <Calendar />
           </SuspenseBoundary>
         </Box>
       </Container>
