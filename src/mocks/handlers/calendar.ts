@@ -1,7 +1,7 @@
 import { CalendarMonthResponse, SuccessResponse } from '@/types/api';
 import { CalendarDayDTO, CalendarMemoDTO, UpsertMemoDTO } from '@/types/dto';
 import { delay, http, HttpResponse } from 'msw';
-import { memoStorage, mockCalendarData, mockOrders } from '../data';
+import { memoStorage, mockCalendarData } from '../data';
 import { toISOString } from '@/utils/formatDate';
 
 export const calendarHandlers = [
@@ -72,42 +72,6 @@ export const calendarHandlers = [
     };
 
     return HttpResponse.json(response);
-  }),
-
-  http.get('/api/orders/daily', async ({ request }) => {
-    await delay(300);
-
-    const url = new URL(request.url);
-    const date = url.searchParams.get('date');
-
-    if (!date) {
-      return HttpResponse.json(
-        {
-          error: 'BAD_REQUEST',
-          message: 'date 파라미터가 필요합니다.',
-          statusCode: 400,
-        },
-        { status: 400 },
-      );
-    }
-
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(date)) {
-      return HttpResponse.json(
-        {
-          error: 'BAD_REQUEST',
-          message: '올바른 날짜 형식(YYYY-MM-DD)을 입력하세요.',
-          statusCode: 400,
-        },
-        { status: 400 },
-      );
-    }
-
-    const orders = mockOrders.filter((order) =>
-      order.orderDate.startsWith(date),
-    );
-
-    return HttpResponse.json(orders);
   }),
 
   http.get('/api/calendar/memo/:date', async ({ params }) => {
