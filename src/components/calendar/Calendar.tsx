@@ -4,17 +4,23 @@ import CalendarGrid from './CalendarGrid';
 import { useCalendarParams } from '@/hooks/params/useCalendarParams';
 import { useCalendar } from '@/hooks/queries/useCalendar';
 import { useModal } from '@/hooks/useModal';
+import DayDetailModal from './DayDetailModal';
+import { useQueryClient } from '@tanstack/react-query';
+import { fetchDailyOrders } from '@/lib/api';
 
 export default function Calendar() {
+  const queryClient = useQueryClient();
   const { getApiParams } = useCalendarParams();
   const { calendarData } = useCalendar(getApiParams.year, getApiParams.month);
   const modal = useModal();
 
-  const handleDayClick = (date: string) => {
-    // TODO: DayDetailModal을 만들 예정
-    modal.alert({
-      title: date,
-      description: '날짜 상세 모달은 Issue #2에서 구현됩니다.',
+  const handleDayClick = async (date: string) => {
+    await queryClient.prefetchQuery({
+      queryKey: ['/orders/daily', date],
+      queryFn: () => fetchDailyOrders(date),
+    });
+    modal.open({
+      content: <DayDetailModal date={date} />,
     });
   };
 
