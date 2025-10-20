@@ -199,6 +199,30 @@ export const orderHandlers = [
     return HttpResponse.json(response);
   }),
 
+  http.get('/api/orders/daily', async ({ request }) => {
+    await delay(500);
+
+    const url = new URL(request.url);
+    const date = url.searchParams.get('date');
+
+    if (!date) {
+      return HttpResponse.json(
+        {
+          error: 'BAD_REQUEST',
+          message: 'date 파라미터가 필요합니다.',
+          statusCode: 400,
+        },
+        { status: 400 },
+      );
+    }
+
+    const orders = mockOrders.filter((order) =>
+      order.orderDate.startsWith(date),
+    );
+
+    return HttpResponse.json(orders);
+  }),
+
   http.get('/api/orders/:id', async ({ params }) => {
     await delay(400);
 
@@ -280,29 +304,5 @@ export const orderHandlers = [
     };
 
     return HttpResponse.json(response);
-  }),
-
-  http.get('/api/orders/daily', async ({ request }) => {
-    await delay(500);
-
-    const url = new URL(request.url);
-    const date = url.searchParams.get('date');
-
-    if (!date) {
-      return HttpResponse.json(
-        {
-          error: 'BAD_REQUEST',
-          message: 'date 파라미터가 필요합니다.',
-          statusCode: 400,
-        },
-        { status: 400 },
-      );
-    }
-
-    const orders = mockOrders.filter((order) =>
-      order.orderDate.startsWith(date),
-    );
-
-    return HttpResponse.json(orders);
   }),
 ];
