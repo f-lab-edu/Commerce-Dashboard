@@ -9,7 +9,7 @@ import { useSetAtom } from 'jotai';
 export function useModal() {
   const openModal = useSetAtom(openModalAtom);
   const closeModal = useSetAtom(closeModalAtom);
-  const closeAllModal = useSetAtom(closeAllModalsAtom);
+  const closeAllModals = useSetAtom(closeAllModalsAtom);
 
   const open = <T = unknown>(options: ModalOptions): Promise<T> => {
     return openModal(options) as Promise<T>;
