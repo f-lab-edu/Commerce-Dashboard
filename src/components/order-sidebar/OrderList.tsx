@@ -1,8 +1,8 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { useOrders } from '@/hooks/queries/useOrders';
-import useInView from '@/hooks/useInView';
 import OrderListItem from './OrderListItem';
 import { useOrderParams } from '@/hooks/params/useOrderParams';
+import InViewTrigger from '../InViewTrigger/InViewTrigger';
 
 export default function OrderList() {
   const { getApiParams } = useOrderParams();
@@ -15,17 +15,6 @@ export default function OrderList() {
     hasNextPage,
     fetchNextPage,
   } = useOrders(getApiParams);
-
-  const { ref } = useInView({
-    threshold: 0.1,
-    rootMargin: '100px',
-    skip: !hasNextPage || isFetchingNextPage,
-    onChange: (inView) => {
-      if (inView && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
-    },
-  });
 
   if (isLoading) {
     return (
@@ -60,12 +49,26 @@ export default function OrderList() {
         <OrderListItem key={order.id} order={order} />
       ))}
 
-      <Box ref={ref} sx={{ height: 1 }} />
-
-      {isFetchingNextPage && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
-          <CircularProgress size={24} />
-        </Box>
+      {hasNextPage && (
+        <InViewTrigger
+          onInView={() => fetchNextPage()}
+          rootMargin='100px'
+          disabled={isFetchingNextPage}
+        >
+          <Box sx={{ py: 2 }}>
+            {isFetchingNextPage ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress size={24} />
+              </Box>
+            ) : (
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant='caption' color='text.secondary'>
+                  스크롤하여 더보기
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </InViewTrigger>
       )}
 
       {!hasNextPage && (
