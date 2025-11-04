@@ -27,7 +27,7 @@ export function useProducts(filter: ProductFilter) {
   }, [query.data]);
 
   return {
-    data: products,
+    products,
     fetchNextPage: query.fetchNextPage,
     hasNextPage: query.hasNextPage,
     isFetchingNextPage: query.isFetchingNextPage,
