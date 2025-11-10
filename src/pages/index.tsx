@@ -21,9 +21,12 @@ const OrderSidebar = dynamic(
   { ssr: false },
 );
 
-const Calendar = dynamic(() => import('@/components/calendar/Calendar'), {
-  ssr: false,
-});
+const OrderDataCalendar = dynamic(
+  () => import('@/components/calendar/OrderDataCalendar'),
+  {
+    ssr: false,
+  },
+);
 
 export default function Home() {
   return (
@@ -43,7 +46,8 @@ export default function Home() {
 
         <Box sx={{ mt: 6 }}>
           <SuspenseBoundary fallback={<CalendarSkeleton />}>
-            <Calendar />
+            {/* <Calendar /> */}
+            <OrderDataCalendar />
           </SuspenseBoundary>
         </Box>
       </Container>
