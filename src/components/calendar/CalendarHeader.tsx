@@ -1,13 +1,22 @@
+// src/components/calendar/CalendarHeader.tsx
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TodayIcon from '@mui/icons-material/Today';
-import { useCalendarParams } from '@/hooks/params/useCalendarParams';
 
-export default function CalendarHeader() {
-  const { calendarParams, goToNextMonth, goToPreviousMonth, goToToday } =
-    useCalendarParams();
+interface CalendarHeaderProps {
+  currentDate: Date;
+  onPrev: () => void;
+  onNext: () => void;
+  onToday: () => void;
+}
 
+export default function CalendarHeader({
+  currentDate,
+  onPrev,
+  onNext,
+  onToday,
+}: CalendarHeaderProps) {
   return (
     <Box
       sx={{
@@ -18,7 +27,10 @@ export default function CalendarHeader() {
       }}
     >
       <Typography variant='h5' component='h2' fontWeight={600}>
-        {calendarParams.year}년 {calendarParams.month}월
+        {currentDate.toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: 'long',
+        })}
       </Typography>
 
       <Box sx={{ display: 'flex', gap: 1 }}>
@@ -26,16 +38,16 @@ export default function CalendarHeader() {
           variant='outlined'
           size='small'
           startIcon={<TodayIcon />}
-          onClick={goToToday}
+          onClick={onToday}
         >
           오늘
         </Button>
 
-        <IconButton size='small' onClick={goToPreviousMonth}>
+        <IconButton size='small' onClick={onPrev}>
           <ChevronLeftIcon />
         </IconButton>
 
-        <IconButton size='small' onClick={goToNextMonth}>
+        <IconButton size='small' onClick={onNext}>
           <ChevronRightIcon />
         </IconButton>
       </Box>
